@@ -39,3 +39,19 @@ The internal case state is still `escalated`. Patient-facing copy now says she n
 ## Primera movida de mañana
 
 Correr el flujo completo en voz alta con el guion de 90 segundos: aterrizaje → detección → ruta → check-in incompleto → asistencia → verificación pendiente → verificación de Ana. Cronometrar fricción. Si Laura (la persona de la demo) se pierde en más de un “siguiente paso”, recortar navegación secundaria y dejar la ruta de cuidado como única pantalla madre.
+
+## Session Close — Week 5
+
+- SigueMX working slice completed.
+- Deploy #1 completed.
+- Mechanical test found refresh-state persistence bug.
+- Bug fixed and redeployed.
+- Persona tested: Doña Mari, 54.
+- Persona confusion: "Escalamiento activado" sounded like medical worsening.
+- Patient-facing escalation language was simplified.
+- Blueprint condition honored: every positive detection has a named owner, one next action, a deadline, and an escalation path.
+- Patient self-report cannot close the case; simulated coordinator verification is required.
+- All patient data is fictional and simulated.
+- No symptom-checker was built.
+
+Tomorrow's first move: Record the final demo video using the production URL and package the submission evidence.
