@@ -32,6 +32,7 @@ export function createSimulatedCase(now = new Date()): DemoCase {
     deadlineLabel: "16 de septiembre",
     affordability: "Opción de menor costo disponible",
     status: "action_needed",
+    currentStep: "screening",
     checkIn: {},
     appointmentBooked: false,
     patientReportedAttendance: false,
@@ -118,6 +119,7 @@ export function applyCheckIn(demoCase: DemoCase, answers: CheckInAnswers): DemoC
     patientReportedAttendance,
     coordinatorVerified: false,
     status: nextStatusAfterCheckIn(demoCase, answers),
+    currentStep: patientReportedAttendance ? "verification" : demoCase.currentStep,
   });
 }
 
@@ -142,6 +144,7 @@ export function markDeadlineApproaching(demoCase: DemoCase): DemoCase {
   return touch({
     ...demoCase,
     status: "deadline_approaching",
+    currentStep: "reminder",
   });
 }
 
@@ -157,6 +160,7 @@ export function escalateMissedDeadline(demoCase: DemoCase): DemoCase {
   return touch({
     ...demoCase,
     status: "escalated",
+    currentStep: "escalation",
   });
 }
 
@@ -169,6 +173,7 @@ export function verifyByCoordinator(demoCase: DemoCase): DemoCase {
     ...demoCase,
     coordinatorVerified: true,
     status: "verified",
+    currentStep: "verification",
   });
 }
 

@@ -7,6 +7,17 @@ export type CaseStatus =
   | "verification_pending"
   | "verified";
 
+export type WorkflowStep =
+  | "landing"
+  | "screening"
+  | "care_route"
+  | "explanation"
+  | "follow_up"
+  | "reminder"
+  | "escalation"
+  | "verification"
+  | "help";
+
 export type ContactedClinic = "si" | "no" | "necesito_ayuda";
 export type HasAppointment = "si" | "no" | "necesito_ayuda";
 export type AttendedAppointment = "si" | "no" | "reprograme";
@@ -43,6 +54,7 @@ export type DemoCase = {
   deadlineLabel: string;
   affordability: "Opción de menor costo disponible";
   status: CaseStatus;
+  currentStep: WorkflowStep;
   checkIn: Partial<CheckInAnswers>;
   appointmentBooked: boolean;
   patientReportedAttendance: boolean;
@@ -57,6 +69,18 @@ export const STATUS_LABEL: Record<CaseStatus, string> = {
   escalated: "ESCALAMIENTO ACTIVADO",
   verification_pending: "VERIFICACIÓN PENDIENTE",
   verified: "PASO VERIFICADO",
+};
+
+export const STEP_PATH: Record<WorkflowStep, string> = {
+  landing: "/",
+  screening: "/deteccion",
+  care_route: "/ruta",
+  explanation: "/explicacion",
+  follow_up: "/seguimiento",
+  reminder: "/recordatorio",
+  escalation: "/escalamiento",
+  verification: "/verificacion",
+  help: "/ayuda",
 };
 
 export const CONTACTED_OPTIONS: { value: ContactedClinic; label: string }[] = [

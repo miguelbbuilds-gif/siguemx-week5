@@ -16,21 +16,23 @@ import {
   validateCheckIn,
   verifyByCoordinator,
 } from "@/lib/case-machine";
+import { parseDemoCase } from "@/lib/persist";
 import {
   clearCase,
-  getCaseSnapshot,
+  getClientCaseSnapshot,
   getServerCaseSnapshot,
   loadCase,
   saveCase,
   subscribeCase,
 } from "@/lib/storage";
-import type { CheckInAnswers, DemoCase } from "@/lib/types";
+import type { CheckInAnswers, DemoCase, WorkflowStep } from "@/lib/types";
 
 type CaseContextValue = {
   demoCase: DemoCase | null;
   ready: boolean;
   startCase: () => DemoCase;
   resetCase: () => void;
+  rememberStep: (step: WorkflowStep) => void;
   saveCheckIn: (answers: Partial<CheckInAnswers>) => { ok: true } | { ok: false; message: string; missing: string[] };
   markAppointment: () => void;
   simulateDeadlineApproaching: () => void;
@@ -41,13 +43,9 @@ type CaseContextValue = {
 const CaseContext = createContext<CaseContextValue | null>(null);
 
 export function CaseProvider({ children }: { children: React.ReactNode }) {
-  const raw = useSyncExternalStore(subscribeCase, getCaseSnapshot, getServerCaseSnapshot);
-  const ready = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  );
-  const demoCase = useMemo(() => (raw ? loadCase() : null), [raw]);
+  const snapshot = useSyncExternalStore(subscribeCase, getClientCaseSnapshot, getServerCaseSnapshot);
+  const ready = snapshot !== null;
+  const demoCase = useMemo(() => (ready ? parseDemoCase(snapshot) : null), [ready, snapshot]);
 
   const startCase = useCallback(() => {
     const next = createSimulatedCase();
@@ -57,6 +55,13 @@ export function CaseProvider({ children }: { children: React.ReactNode }) {
 
   const resetCase = useCallback(() => {
     clearCase();
+  }, []);
+
+  const rememberStep = useCallback((step: WorkflowStep) => {
+    if (step === "landing") return;
+    const current = loadCase();
+    if (!current || current.currentStep === step) return;
+    saveCase({ ...current, currentStep: step, updatedAt: new Date().toISOString() });
   }, []);
 
   const saveCheckIn = useCallback((answers: Partial<CheckInAnswers>) => {
@@ -107,6 +112,7 @@ export function CaseProvider({ children }: { children: React.ReactNode }) {
       ready,
       startCase,
       resetCase,
+      rememberStep,
       saveCheckIn,
       markAppointment,
       simulateDeadlineApproaching,
@@ -118,6 +124,7 @@ export function CaseProvider({ children }: { children: React.ReactNode }) {
       ready,
       startCase,
       resetCase,
+      rememberStep,
       saveCheckIn,
       markAppointment,
       simulateDeadlineApproaching,

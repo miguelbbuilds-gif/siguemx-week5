@@ -11,6 +11,7 @@ import {
 } from "@/components/Ui";
 import { BellIcon, HeartIcon, ListIcon, PersonIcon } from "@/components/Icons";
 import { useDemoCase } from "@/components/CaseProvider";
+import { resumePath } from "@/lib/persist";
 
 const benefits = [
   { title: "Un plan claro", icon: ListIcon },
@@ -29,7 +30,8 @@ export default function LandingPage() {
   }
 
   function continueCase() {
-    router.push("/ruta");
+    if (!demoCase) return;
+    router.push(resumePath(demoCase));
   }
 
   return (

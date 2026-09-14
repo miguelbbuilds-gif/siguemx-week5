@@ -1,4 +1,5 @@
 import { STORAGE_KEY, type DemoCase } from "./types.ts";
+import { parseDemoCase, serializeDemoCase } from "./persist.ts";
 
 const listeners = new Set<() => void>();
 
@@ -19,38 +20,39 @@ export function subscribeCase(listener: () => void) {
   };
 }
 
-export function getCaseSnapshot() {
-  if (typeof window === "undefined") return null;
-  return window.localStorage.getItem(STORAGE_KEY);
+export function getClientCaseSnapshot(): string {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY) ?? "";
+  } catch {
+    return "";
+  }
 }
 
-export function getServerCaseSnapshot() {
+export function getServerCaseSnapshot(): null {
   return null;
 }
 
 export function loadCase(): DemoCase | null {
-  const raw = getCaseSnapshot();
-  if (!raw) return null;
-
-  try {
-    const parsed = JSON.parse(raw) as DemoCase;
-    if (!parsed || parsed.simulated !== true || parsed.id !== "sim-laura-cdmx-001") {
-      return null;
-    }
-    return parsed;
-  } catch {
-    return null;
-  }
+  if (typeof window === "undefined") return null;
+  return parseDemoCase(getClientCaseSnapshot());
 }
 
 export function saveCase(demoCase: DemoCase): void {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(demoCase));
-  emit();
+  try {
+    window.localStorage.setItem(STORAGE_KEY, serializeDemoCase(demoCase));
+    emit();
+  } catch {
+    // Private mode or blocked storage should not crash the demo.
+  }
 }
 
 export function clearCase(): void {
   if (typeof window === "undefined") return;
-  window.localStorage.removeItem(STORAGE_KEY);
+  try {
+    window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // Ignore storage failures.
+  }
   emit();
 }

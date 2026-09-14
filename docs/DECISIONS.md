@@ -16,6 +16,16 @@ Esta es una demostración de curso, no un producto clínico. Laura es una person
 
 El objetivo es un slice navegable que sobreviva un refresh durante la demo. No hay autenticación, no hay datos personales reales y no hay razón para introducir Supabase. localStorage guarda el caso de ejemplo en el navegador y se puede borrar con el control de demo.
 
+## Mechanical test bug and fix
+
+Mechanical test bug: refresh caused progress/state loss.
+
+The app treated “storage has not been read yet” as “there is no simulated case,” redirected to landing, and initialized the follow-up form before restored answers were available.
+
+Fix: persisted simulated case state to localStorage and restored it on load.
+
+The stored payload is an allowlisted fictional case (status, workflow step, check-in answers, deadline/escalation, verification-pending, and verified-handoff). Restoration waits for a client read so Next.js hydration does not clobber or discard the demo.
+
 ## Primera movida de mañana
 
 Correr el flujo completo en voz alta con el guion de 90 segundos: aterrizaje → detección → ruta → check-in incompleto → asistencia → verificación pendiente → verificación de Ana. Cronometrar fricción. Si Laura (la persona de la demo) se pierde en más de un “siguiente paso”, recortar navegación secundaria y dejar la ruta de cuidado como única pantalla madre.

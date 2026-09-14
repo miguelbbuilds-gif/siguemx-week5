@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { shouldRedirectToLanding } from "@/lib/persist";
 import { useDemoCase } from "./CaseProvider";
 
 export function RequireCase({ children }: { children: React.ReactNode }) {
@@ -9,7 +10,7 @@ export function RequireCase({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (ready && !demoCase) {
+    if (shouldRedirectToLanding(ready, demoCase)) {
       router.replace("/");
     }
   }, [demoCase, ready, router]);
@@ -19,7 +20,7 @@ export function RequireCase({ children }: { children: React.ReactNode }) {
   }
 
   if (!demoCase) {
-    return null;
+    return <p className="py-20 text-center text-sm text-ink-500">Cargando caso simulado…</p>;
   }
 
   return <>{children}</>;
