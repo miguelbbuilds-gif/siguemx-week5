@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SigueMX
 
-## Getting Started
+Prototipo de Week 5: entrega operativa después de una detección simulada.
 
-First, run the development server:
+> Detección es solo el inicio. Alguien se encarga del siguiente paso.
+
+Este no es un diagnóstico, no es un chequeo de síntomas y no guarda datos reales de pacientes.
+
+## Cómo correrlo
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm test
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Flujo
 
-## Learn More
+Landing → caso simulado → riesgo elevado de diabetes (SIMULADO) → ruta de cuidado → explicación → check-in → recordatorio / escalamiento → verificación pendiente → verificación de coordinadora.
 
-To learn more about Next.js, take a look at the following resources:
+## Commits sugeridos (aún no hechos)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Hazlos tú cuando quieras. El código ya está organizado para estos cortes:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Create SigueMX interface and simulated case  
+   `src/app/page.tsx`, `src/app/deteccion/page.tsx`, `src/app/layout.tsx`, `src/app/globals.css`
+2. Add operational handoff workflow  
+   `src/app/ruta/page.tsx`, `src/lib/types.ts`, `src/lib/storage.ts`, `src/components/*`
+3. Add structured follow-up check-ins  
+   `src/app/seguimiento/page.tsx`, `src/app/explicacion/page.tsx`, `src/app/api/explicacion/route.ts`
+4. Add escalation and verified handoff logic  
+   `src/lib/case-machine.ts`, `src/app/recordatorio/page.tsx`, `src/app/escalamiento/page.tsx`, `src/app/verificacion/page.tsx`
+5. Fix testing/persona issue and finalize demo  
+   `src/lib/case-machine.test.ts`, `docs/*`, etiquetas de persona ficticia
 
-## Deploy on Vercel
+## IA
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`POST /api/explicacion` usa datos estructurados. Si no hay `OPENAI_API_KEY` en el servidor, responde con un fallback simulado. Copia `.env.example` a `.env.local` solo en tu máquina. Nunca pongas la llave en el cliente.
