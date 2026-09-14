@@ -117,7 +117,7 @@ function CareRouteContent() {
         ) : null}
         {status === "escalated" ? (
           <p className="mt-4 text-sm font-medium text-red-800">
-            No pudimos confirmar tu cita antes de la fecha límite. Ana sigue a cargo.
+            Aún no pudimos confirmar tu cita. Ana, tu coordinadora, dará seguimiento a tu caso.
           </p>
         ) : null}
         {status === "verification_pending" ? (

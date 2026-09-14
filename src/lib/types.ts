@@ -66,7 +66,7 @@ export type DemoCase = {
 export const STATUS_LABEL: Record<CaseStatus, string> = {
   action_needed: "ACTION NEEDED",
   deadline_approaching: "ACTION NEEDED",
-  escalated: "ESCALAMIENTO ACTIVADO",
+  escalated: "NECESITAS APOYO",
   verification_pending: "VERIFICACIÓN PENDIENTE",
   verified: "PASO VERIFICADO",
 };

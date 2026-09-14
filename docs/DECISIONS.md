@@ -26,6 +26,16 @@ Fix: persisted simulated case state to localStorage and restored it on load.
 
 The stored payload is an allowlisted fictional case (status, workflow step, check-in answers, deadline/escalation, verification-pending, and verified-handoff). Restoration waits for a client read so Next.js hydration does not clobber or discard the demo.
 
+## Persona test: Doña Mari
+
+Persona tested: Doña Mari, 54.
+
+Confusion: "Escalamiento activado" sounded like medical worsening.
+
+Fix: replaced technical escalation language with clear explanation of what happens next and who owns the follow-up.
+
+The internal case state is still `escalated`. Patient-facing copy now says she needs help with the next step, that the appointment is not yet confirmed, that Ana owns follow-up, and that the simulated screening result has not changed.
+
 ## Primera movida de mañana
 
 Correr el flujo completo en voz alta con el guion de 90 segundos: aterrizaje → detección → ruta → check-in incompleto → asistencia → verificación pendiente → verificación de Ana. Cronometrar fricción. Si Laura (la persona de la demo) se pierde en más de un “siguiente paso”, recortar navegación secundaria y dejar la ruta de cuidado como única pantalla madre.
